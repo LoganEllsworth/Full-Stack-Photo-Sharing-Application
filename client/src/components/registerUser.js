@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from "react";
 
-function RegisterUser() {
+function RegisterUser({setToken}) {
     const [firstname, setFirstname] = useState("");
     const [lastname, setLastname] = useState("");
     const [email, setEmail] = useState("");
@@ -34,9 +34,11 @@ function RegisterUser() {
                 body: JSON.stringify(body)
             });
             if (response.status === 201) {
+                setToken(email + "&" + password);
                 clearForm();
                 document.getElementById("message").className = "alert alert-success";
-                setMessage("User added successfully");
+                setMessage("User added successfully. Logging in...");
+                window.location.href = "/";
             } else {
                 document.getElementById("message").className = "alert alert-danger";
                 setMessage("This email is already in use");
@@ -109,7 +111,7 @@ function RegisterUser() {
                             <p>Gender:</p>
                         </div>
                         <div className="col-10">
-                            <select class="form-control" value={gender} onChange={e => setGender(e.target.value)}>
+                            <select className="form-control" value={gender} onChange={e => setGender(e.target.value)}>
                                 <option></option>
                                 <option>Male</option>
                                 <option>Female</option>
