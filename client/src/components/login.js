@@ -1,9 +1,12 @@
 import React, { Fragment, useState } from "react";
 
-function Login() {
+import RegisterUser from './registerUser';
+
+function Login({setToken}) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
+    const [register, setRegister] = useState(false);
 
     const onSubmitForm = async (e) => {
         setMessage("");
@@ -24,9 +27,11 @@ function Login() {
                 body: JSON.stringify(body)
             });
             if (response.status === 201) {
+                setToken(email + "&" + password);
                 clearForm();
                 document.getElementById("message").className = "alert alert-success";
-                setMessage("Login successful");
+                setMessage("Login successful. Redirecting...");
+                window.location.href = "/";
             } else {
                 document.getElementById("message").className = "alert alert-danger";
                 setMessage("Invalid password");
@@ -44,7 +49,7 @@ function Login() {
 
     return (
         <Fragment>
-            <form className="w-50 bg-light rounded mx-auto" onSubmit={onSubmitForm}>
+            {!register && <form className="w-50 bg-light rounded mx-auto" onSubmit={onSubmitForm}>
                 <div className="col">
                     <h1>Login</h1>
                     <p role="alert" id="message">{message}</p>
@@ -66,7 +71,9 @@ function Login() {
                     </div>
                     <button className="btn btn-success">Login</button>
                 </div>
-            </form>
+            </form> }
+            {/* <button className="btn btn-success" onClick={setRegister(!register)}>{register ? "Existing User?" : "New User?"}</button> */}
+            {register && <RegisterUser />}
         </Fragment>
     );
 }
