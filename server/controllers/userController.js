@@ -3,18 +3,11 @@ const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const SALT_ROUNDS = 10;
 
-const getUser = (req, res) => {
-    pool.query(User.getUser, (error, results) => {
-        if (error) throw error;
-        res.status(200).json(results.rows);
-    })
-};
-
 const getUserById = (req, res) => {
     let id = parseInt(req.params.id);
     pool.query(User.getUserById, [id], (error, results) => {
         if (error) throw error;
-        res.status(200).json(results.rows);
+        res.status(200).json(results.rows[0]);
     })
 };
 
@@ -26,14 +19,23 @@ const createUser = async (req, res) => {
     pool.query(User.getUserByEmail, [email], (error, results) => {
         if (error) throw error;
         if (results.rows.length) {
-            res.send({ message: "This email is already registered."});
+            res.send({ 
+                success: false,
+                message: "This email is already registered. Please login."
+            });
             return;
         }
 
         pool.query(User.createUser, [firstname, lastname, email, dob, hometown, gender, hashedPassword], (error, results) => {
             if (error) throw error;
-            res.status(201).send({message: "User created."});
-            console.log("User created.");
+            pool.query(User.getUserByEmail, [email], (error, results) => {
+                if (error) throw error;
+                res.send({ 
+                    success: true,
+                    message: "Success! Logging in...",
+                    user: results.rows[0],
+                });
+            });
         });
     });
 }
@@ -44,18 +46,26 @@ const login = async (req, res) => {
     pool.query(User.getUserByEmail, [email], async (error, results) => {
         if (error) throw error;
         if (!results.rows.length || results.rows.length > 1) {
-            res.send({message: "No user found."});
+            res.send({
+                success: false,
+                message: "No accounts found with that email."
+            });
             return;
         }
         const validPassword = await checkPassword(password, results.rows[0].password);
-        console.log(validPassword);
 
         if (!validPassword) {
-            res.send({message: "Invalid password."})
+            res.send({
+                success: false,
+                message: "Invalid password."
+            });
             return;
         }
-
-        res.status(201).send({message: `Login successful for ${email}`});
+        res.status(201).send({
+            success: true,
+            message: `Login successful.`,
+            user: results.rows[0],
+        });
     });
 }
 
@@ -82,7 +92,6 @@ function checkPassword(cleartextPassword, hash) {
 }
 
 module.exports = {
-    getUser,
     getUserById,
     createUser,
     login,

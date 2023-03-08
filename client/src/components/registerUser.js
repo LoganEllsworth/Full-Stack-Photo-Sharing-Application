@@ -6,15 +6,16 @@ function RegisterUser({setToken}) {
     const [email, setEmail] = useState("");
     const [dob, setDob] = useState("");
     const [hometown, setHometown] = useState("");
-    const [gender, setGender] = useState("");
+    const [gender, setGender] = useState();
     const [password, setPassword] = useState("");
-    const [message, setMessage] = useState("");
+    const [message, setMessage] = useState();
+    const [success, setSuccess] = useState();
 
     const onSubmitForm = async (e) => {
-        setMessage("");
+        setMessage();
         e.preventDefault();
         if (!firstname || !lastname || !email || !dob || !password) {
-            document.getElementById("message").className = "alert alert-danger";
+            setSuccess(false);
             setMessage("Please enter required fields.");
             return;
         }
@@ -33,17 +34,14 @@ function RegisterUser({setToken}) {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(body)
             });
-            if (response.status === 201) {
-                setToken(email + "&" + password);
+            const results = await response.json();
+            setSuccess(results?.success);
+            setMessage(results?.message);
+            if (results.success) {
+                setToken(results.user);
                 clearForm();
-                document.getElementById("message").className = "alert alert-success";
-                setMessage("User added successfully. Logging in...");
                 window.location.href = "/";
-            } else {
-                document.getElementById("message").className = "alert alert-danger";
-                setMessage("This email is already in use");
             }
-            console.log(response);
         } catch (e) {
             console.error(e.message);
         }
@@ -55,9 +53,9 @@ function RegisterUser({setToken}) {
         setEmail("");
         setDob("");
         setHometown("");
-        setGender("");
+        setGender();
         setPassword("");
-        setMessage("");
+        setMessage();
     };
 
     return (
@@ -65,7 +63,7 @@ function RegisterUser({setToken}) {
             <form className="w-50 bg-light rounded mx-auto" onSubmit={onSubmitForm}>
                 <div className="col">
                     <h1>Register a new user</h1>
-                    <p role="alert" id="message">{message}</p>
+                    {message && <p className={success ? "alert alert-success" : "alert alert-danger"} role="alert">{message}</p>}
                     <div className="row mt-2">
                         <div className="col">
                             <p>First Name:*</p>
