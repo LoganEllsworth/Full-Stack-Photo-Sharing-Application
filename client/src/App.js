@@ -5,18 +5,11 @@ import { BrowserRouter, Link, Routes, Route } from "react-router-dom";
 import useToken from './components/useToken';
 import RegisterUser from './components/registerUser';
 import Login from './components/login';
-
-const logout = () => {
-  sessionStorage.clear();
-}
+import Profile from './components/profile';
 
 function App() {
 
   const { token, setToken } = useToken();
-
-  // if (!token) {
-  //   return <Login setToken={setToken}/>
-  // }
 
   return (
     <BrowserRouter>
@@ -37,10 +30,11 @@ function App() {
         </div>
       </nav>
       <Routes>
-        <Route exact path="/" element={null} />
+        <Route exact path="/" element={token ? null : <Login setToken={setToken}/>} />
         <Route exact path="/register" element={<RegisterUser setToken={setToken}/>} />
         <Route path="/example/:id" element={null} />
         <Route path="/login" element={<Login setToken={setToken} />} />
+        <Route path="/profile" element={<Profile token={token}/>} />
       </Routes>
     </BrowserRouter>
   );

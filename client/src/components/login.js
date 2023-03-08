@@ -1,18 +1,16 @@
 import React, { Fragment, useState } from "react";
 
-import RegisterUser from './registerUser';
-
 function Login({setToken}) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [message, setMessage] = useState("");
-    const [register, setRegister] = useState(false);
+    const [message, setMessage] = useState();
+    const [success, setSuccess] = useState();
 
     const onSubmitForm = async (e) => {
-        setMessage("");
+        setMessage();
         e.preventDefault();
         if (!email || !password) {
-            document.getElementById("message").className = "alert alert-danger";
+            setSuccess(false);
             setMessage("Please enter both email and password.");
             return;
         }
@@ -26,17 +24,14 @@ function Login({setToken}) {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(body)
             });
-            if (response.status === 201) {
-                setToken(email + "&" + password);
+            const results = await response.json();
+            setSuccess(results?.success);
+            setMessage(results?.message);
+            if (results.success) {
+                setToken(results.user);
                 clearForm();
-                document.getElementById("message").className = "alert alert-success";
-                setMessage("Login successful. Redirecting...");
                 window.location.href = "/";
-            } else {
-                document.getElementById("message").className = "alert alert-danger";
-                setMessage("Invalid password");
             }
-            console.log(response);
         } catch (e) {
             console.error(e.message);
         }
@@ -49,10 +44,10 @@ function Login({setToken}) {
 
     return (
         <Fragment>
-            {!register && <form className="w-50 bg-light rounded mx-auto" onSubmit={onSubmitForm}>
+            <form className="w-50 bg-light rounded mx-auto" onSubmit={onSubmitForm}>
                 <div className="col">
                     <h1>Login</h1>
-                    <p role="alert" id="message">{message}</p>
+                    {message && <p className={success ? "alert alert-success" : "alert alert-danger"} role="alert">{message}</p>}
                     <div className="row mt-2">
                         <div className="col">
                             <p>Email:</p>
@@ -71,9 +66,7 @@ function Login({setToken}) {
                     </div>
                     <button className="btn btn-success">Login</button>
                 </div>
-            </form> }
-            {/* <button className="btn btn-success" onClick={setRegister(!register)}>{register ? "Existing User?" : "New User?"}</button> */}
-            {register && <RegisterUser />}
+            </form>
         </Fragment>
     );
 }

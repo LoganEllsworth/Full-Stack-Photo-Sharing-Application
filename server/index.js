@@ -4,12 +4,10 @@ const cors = require('cors');
 const app = express();
 const port = 5000;
 
-app.use(express.json({
-    type: ['application/json', 'text/pain']
-}));
+app.use(express.json());
 
 app.use(cors());
 
-app.use('/api/user', router);
+app.use('/api', router);
 
 app.listen(port, () => console.log(`App listening on port ${port}`));
