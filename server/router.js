@@ -11,6 +11,7 @@ const router = Router();
 router.get('/user/:id', UserController.getUserById);
 router.post('/user/register', UserController.createUser);
 router.post('/user/login', UserController.login);
+router.post('/user/search', UserController.search);
 
 //*** FRIEND ROUTES ***//
 

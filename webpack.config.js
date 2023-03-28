@@ -7,9 +7,10 @@ module.exports = {
     devtool: 'inline-source-map',
     entry: path.resolve(__dirname, './client/index.js'),
     output: {
-        path: path.resolve(__dirname, './client'),
+        path: path.resolve(__dirname, 'src/client'),
         publicPath: '/',
-        filename: 'bundle.js',
+        filename: '[name].bundle.js',
+        clean: true,
     },
     module: {
         rules: [
@@ -50,11 +51,13 @@ module.exports = {
     ],
     devServer: {
         port: 3000,
+        hot: true,
+        historyApiFallback: true,
         static: {
-            publicPath: path.join(__dirname, './client')
+            publicPath: path.join(__dirname, 'src')
         },
-        server: {
-            type: 'https',
-        },
+    },
+    optimization: {
+        runtimeChunk: 'single'
     },
 };

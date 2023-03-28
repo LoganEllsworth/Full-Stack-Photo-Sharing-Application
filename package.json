@@ -4,7 +4,7 @@
   "description": "A photo sharing social media application. Group Members: Logan Ellsworth, Jackson Rhea, Sumei Woo, and Sebastian Diaz Aguilar.",
   "main": "server/index.js",
   "scripts": {
-    "client": "webpack-dev-server --config webpack.config.js --open",
+    "client": "webpack-dev-server --config webpack.config.js",
     "server": "nodemon"
   },
   "author": "",
