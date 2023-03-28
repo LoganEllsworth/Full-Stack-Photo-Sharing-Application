@@ -8,7 +8,7 @@
         {
             "name": "Run Client Script",
             "request": "launch",
-            "command": "cd client; npm start",
+            "command": "npm run client",
             "type": "node-terminal",
             "skipFiles": [
                 "<node_internals>/**",
