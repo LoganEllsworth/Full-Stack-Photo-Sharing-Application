@@ -1,5 +1,4 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { Buffer } from 'buffer';
 import ImageUploader from 'react-images-upload';
 import AlbumItem from "./albumItem";
 import PhotoItem from "./photoItem";

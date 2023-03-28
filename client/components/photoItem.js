@@ -1,5 +1,4 @@
 import React, { Fragment, useState, useEffect } from "react";
-import summer1 from '../photos/summer1.jpg';
 
 function PhotoItem({ photos }) {
     return (

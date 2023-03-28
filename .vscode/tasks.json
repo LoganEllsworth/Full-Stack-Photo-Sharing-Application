@@ -1,12 +1,5 @@
 {
     "tasks": [
-        //{
-            //"type": "npm",
-            //"script": "client",
-            //"problemMatcher": [],
-            //"label": "npm: client",
-            //"detail": "webpack-dev-server --config webpack.local.js --open"
-        //},
         {
             "type": "npm",
             "script": "server",
