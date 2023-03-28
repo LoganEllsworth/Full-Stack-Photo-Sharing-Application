@@ -69,6 +69,18 @@ const login = async (req, res) => {
     });
 }
 
+const search = async (req, res) => {
+    const { search } = req.body;
+    pool.query("SELECT * FROM users WHERE firstname ILIKE '%" + search + "%' OR lastname ILIKE '%" + search + "%' OR email ILIKE '%" + search + "%'", (error, results) => {
+        if (error) throw error;
+        res.status(200).send({
+            success: true,
+            message: `Search successful.`,
+            rows: results.rows,
+        });
+    })
+}
+
 function hashPassword(cleartextPassword) {
     return new Promise((fulfill, reject) => {
         bcrypt.hash(cleartextPassword, SALT_ROUNDS, (error, hash) => {
@@ -95,4 +107,5 @@ module.exports = {
     getUserById,
     createUser,
     login,
+    search,
 }

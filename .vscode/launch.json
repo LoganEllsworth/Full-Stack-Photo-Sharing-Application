@@ -22,7 +22,15 @@
             "sourceMaps": true,
             "smartStep": true
         },
-        //Back-End
+        // Front-End
+        {
+            "name": "Client",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}",
+        },
+        // Back-End
         {
             "name": "Server",
             "type": "node",
@@ -45,6 +53,7 @@
             "name": "Run All Configs",
             "configurations": [
                 "Run Client Script",
+                "Client",
                 "Server"
             ]
         }

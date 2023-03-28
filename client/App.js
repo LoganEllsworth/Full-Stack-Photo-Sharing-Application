@@ -6,6 +6,7 @@ import useToken from './components/useToken';
 import RegisterUser from './components/registerUser';
 import Login from './components/login';
 import Profile from './components/profile';
+import Search from './components/search';
 
 function App() {
 
@@ -34,7 +35,8 @@ function App() {
         <Route exact path="/register" element={<RegisterUser setToken={setToken}/>} />
         <Route path="/example/:id" element={null} />
         <Route path="/login" element={<Login setToken={setToken} />} />
-        <Route path="/profile" element={<Profile token={token}/>} />
+        <Route path="/profile" element={<Profile token={token} />} />
+        <Route path="/search" element={<Search token={token} />} />
       </Routes>
     </BrowserRouter>
   );
