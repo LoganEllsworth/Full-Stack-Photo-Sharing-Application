@@ -1,5 +1,7 @@
 import React, { Fragment, useState } from "react";
 
+import Friends from './friends';
+
 function Search({token}) {
     const [showPeople, setShowPeople] = useState(true);
     const [showTags, setShowTags] = useState(false);
@@ -46,24 +48,32 @@ function Search({token}) {
         setMessage();
         e.preventDefault();
         if (!search) {
+            setSearchResults();
             setSuccess(false);
             setMessage("Please enter a search parameter.");
             return;
         }
         try {
-            const body = {
-                search: search,
-            }
-            const response = await fetch("http://localhost:5000/api/user/search", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(body)
-            });
-            const results = await response.json();
-            setSuccess(results?.success);
-            setMessage(results?.message);
-            if (results.success) {
-                setSearchResults(results.rows);
+            if (showPeople) {
+                const body = {
+                    origin: token.id,
+                    search: search,
+                }
+                const response = await fetch("http://localhost:5000/api/user/search", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(body)
+                });
+                const results = await response.json();
+                setSuccess(results?.success);
+                setMessage(results?.message);
+                if (results.success) {
+                    setSearchResults(results.rows);
+                }
+            } else if (showTags) {
+                //Call to fetch Tags search results
+            } else if (showComments) {
+                //Call to fetch Comments search results
             }
         } catch (e) {
             console.error(e.message);
@@ -96,16 +106,12 @@ function Search({token}) {
                                 <input type="text" className="form-control" value={search} onChange={e => setSearch(e.target.value)}></input>
                             </div>
                         </div>
-                        <button className="btn btn-success mt-3">Search</button>
+                        <button className="btn btn-success mt-3 mb-3">Search</button>
                     </div>
                 </form>
-                <div className="list-group mt-2">{searchResults?.map(result =>
-                    <a onClick={null} key={result.id} className="list-group-item list-group-item-action flex-column align-items-start">
-                        <div className="d-flex w-100 justify-content-between">
-                            <h5 className="mb-1">{result.firstname + " " + result.lastname}</h5>
-                        </div>
-                    </a>)}
-                </div>
+                {showPeople && searchResults && <Friends token={token} users={searchResults} update={onSubmitForm} />}
+                {showTags && <div>Tag search results...</div>}
+                {showComments && <div>Comment search results...</div>}
             </div>
         </Fragment>
     );

@@ -1,11 +1,13 @@
 import React, { Fragment, useState } from "react";
 
 import Albums from './albums';
+import Friends from './friends';
 
 function Profile({token}) {
     const [showAlbums, setShowAlbums] = useState(true);
     const [showFollowing, setShowFollowing] = useState(false);
     const [showFollowers, setShowFollowers] = useState(false);
+    const [users, setUsers] = useState();
 
     function changeTab(tab) {
         switch(tab) {
@@ -18,6 +20,7 @@ function Profile({token}) {
                 document.getElementById("followers").className = "nav-link";
                 break;
             case "following":
+                getFriends();
                 setShowAlbums(false);
                 setShowFollowing(true);
                 setShowFollowers(false);
@@ -26,6 +29,7 @@ function Profile({token}) {
                 document.getElementById("followers").className = "nav-link";
                 break;
             case "followers":
+                getFollowers();
                 setShowAlbums(false);
                 setShowFollowing(false);
                 setShowFollowers(true);
@@ -36,6 +40,31 @@ function Profile({token}) {
             default:
                 setShowFollowing(false);
                 setShowAlbums(false);
+        }
+    }
+
+    const getFriends = async () => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/friend/friends/${token.id}`);
+            const results = await response.json();
+            if (results.success) {
+                setUsers(results.rows);
+            }
+        } catch (e) {
+            console.error(e.message);
+        }
+    }
+
+    const getFollowers = async () => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/friend/followers/${token.id}`);
+            const results = await response.json();
+            if (results.success) {
+                setUsers(results.rows);
+            }
+            console.log(results.rows)
+        } catch (e) {
+            console.error(e.message);
         }
     }
 
@@ -66,8 +95,7 @@ function Profile({token}) {
                     </li>
                 </ul>
                 {showAlbums && <Albums userId={token.id}/>}
-                {showFollowing && <p>Need query that selects destination from user_friends table where origin = token.id</p>}
-                {showFollowers && <p>Need query that selects origin from user_friends table where destination = token.id</p>}
+                {(showFollowing || showFollowers) && <Friends token={token} users={users} update={() => {window.location.href = "/profile"}}/>}
             </div>
         </Fragment>
     );

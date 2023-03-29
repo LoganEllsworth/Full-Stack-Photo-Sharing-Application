@@ -70,8 +70,14 @@ const login = async (req, res) => {
 }
 
 const search = async (req, res) => {
-    const { search } = req.body;
-    pool.query("SELECT * FROM users WHERE firstname ILIKE '%" + search + "%' OR lastname ILIKE '%" + search + "%' OR email ILIKE '%" + search + "%'", (error, results) => {
+    const { origin, search } = req.body;
+    pool.query(`
+    SELECT U.id, U.firstname, U.lastname,
+    CASE WHEN F.destination IS NULL THEN FALSE ELSE TRUE END AS friends
+    FROM users AS U
+    LEFT JOIN user_friend AS F ON (U.id = F.destination AND F.origin = ${origin})
+    WHERE (firstname ILIKE '%${search}%' OR lastname ILIKE '%${search}%' OR email ILIKE '%${search}%') AND U.id != ${origin}`
+    , (error, results) => {
         if (error) throw error;
         res.status(200).send({
             success: true,
