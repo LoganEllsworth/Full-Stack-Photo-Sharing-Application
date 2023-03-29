@@ -4,6 +4,7 @@ const upload = multer({ limits:{fieldSize: 25 * 1024 * 1024} });
 const UserController = require('./controllers/userController');
 const AlbumController = require('./controllers/albumController');
 const PhotoController = require('./controllers/photoController');
+const FriendController = require('./controllers/friendController');
 
 const router = Router();
 
@@ -14,6 +15,10 @@ router.post('/user/login', UserController.login);
 router.post('/user/search', UserController.search);
 
 //*** FRIEND ROUTES ***//
+router.post('/friend/add', FriendController.addFriend);
+router.post('/friend/delete', FriendController.deleteFriend);
+router.get('/friend/friends/:id', FriendController.getFriends);
+router.get('/friend/followers/:id', FriendController.getFollowers);
 
 //*** ALBUM ROUTES ***//
 router.post('/album/create', AlbumController.createAlbum);

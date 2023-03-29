@@ -49,7 +49,7 @@ function Albums({userId}) {
                     const body = {
                         "userid": userId,
                         "name": name,
-                        "createdat":  new Date().toLocaleString(),
+                        "createdat": new Date().toLocaleString(),
                     }
                     const response = await fetch("http://localhost:5000/api/album/create", {
                         method: "POST",
