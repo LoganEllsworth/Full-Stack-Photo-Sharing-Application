@@ -3,7 +3,6 @@ const Photo = require('../models/photo');
 
 const getPhotosByAlbumId = async (req, res) => {
     let id = parseInt(req.params.id);
-
     pool.query(Photo.getPhotosByAlbumId, [id], (error, results) => {
         if (error) throw error;
         if (results.rows.length) {
@@ -12,6 +11,12 @@ const getPhotosByAlbumId = async (req, res) => {
                 message: "Photos found.",
                 photos: results.rows,
             });
+        } else {
+            res.send({
+                success: true,
+                message: "Empty album.",
+                photos: null,
+            })
         }
     });
 }
@@ -25,12 +30,25 @@ const createPhoto = async (req, res) => {
             res.send({ 
                 success: true,
                 message: "Photo created.",
+                id: results.rows[0].id,
             });
         }
+    });
+}
+
+const deletePhoto = async (req, res) => {
+    let id = parseInt(req.params.id);
+    pool.query(Photo.deletePhoto, [id], (error, results) => {
+        if (error) throw error;
+        res.status(200).send({
+            success: true,
+            message: `Photo deleted.`,
+        });
     });
 }
 
 module.exports = {
     getPhotosByAlbumId,
     createPhoto,
+    deletePhoto,
 }

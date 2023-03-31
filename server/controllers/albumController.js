@@ -29,7 +29,20 @@ const getAlbumByUserId = async (req, res) => {
     });
 }
 
+const deleteAlbum = async (req, res) => {
+    let id = parseInt(req.params.id);
+
+    pool.query(Album.deleteAlbumb, [id], (error, results) => {
+        if (error) throw error;
+        res.status(200).send({
+            success: true,
+            message: `Albumb deleted.`,
+        });
+    });
+}
+
 module.exports = {
     createAlbum,
     getAlbumByUserId,
+    deleteAlbum,
 }

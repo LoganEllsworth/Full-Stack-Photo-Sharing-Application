@@ -12,9 +12,10 @@ function Albums({userId}) {
     const [message, setMessage] = useState();
     const [success, setSuccess] = useState();
     const [viewAlbum, setViewAlbum] = useState(false);
-    const [newPhoto, setNewPhoto] = useState(true);
+    const [newPhoto, setNewPhoto] = useState(false);
     const [caption, setCaption] = useState("");
     const [photoData, setPhotoData] = useState("");
+    const [tags, setTags] = useState("");
 
     useEffect(() => {
         getAlbumsByUserId();
@@ -87,9 +88,8 @@ function Albums({userId}) {
                     const results = await response.json();
                     setSuccess(results?.success);
                     setMessage(results?.message);
-                    console.log(success);
-                    console.log(results);
                     if (results.success) {
+                        await createTags(results.id);
                         clearForm();
                         window.location.href = "/profile";
                     }
@@ -104,6 +104,7 @@ function Albums({userId}) {
     const clearForm = () => {
         setName("");
         setCaption("");
+        setTags("");
         setMessage();
         setPhotoData();
     };
@@ -127,6 +128,39 @@ function Albums({userId}) {
         reader.onload = () => resolve(setPhotoData(reader.result));
         reader.onerror = error => reject(error);
     });
+
+    const deleteAlbum = async () => {
+        if (album) {
+            try {
+                const response = await fetch(`http://localhost:5000/api/album/delete/${album.id}`);
+                const results = await response.json();
+                setSuccess(results?.success);
+                setMessage(results?.message);
+                window.location.href = "/profile";
+            } catch (e) {
+                console.error(e.message);
+            }
+        }
+    }
+
+    const createTags = async (photoid) => {
+        if (tags) {
+            try {
+                let tagsArray = tags.split(' ');
+                const body = {
+                    "photoid": photoid,
+                    "names": tagsArray,
+                }
+                await fetch("http://localhost:5000/api/tags/create", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(body)
+                });
+            } catch (e) {
+                console.error(e.message);
+            }
+        }
+    }
 
     return (
         <Fragment>
@@ -159,7 +193,7 @@ function Albums({userId}) {
             {viewAlbum && <div className="mt-2">
                 <button className="btn btn-secondary" onClick={() => setViewAlbum(false)}>Back</button>
                 <button className="btn btn-success" onClick={() => setNewPhoto(true)}>+ Photo</button>
-                <button className="btn btn-danger" onClick={() => setViewAlbum(false)}>Delete Album</button>
+                <button className="btn btn-danger" onClick={() => deleteAlbum()}>Delete Album</button>
                 {newPhoto &&
                 <form id="photo" onSubmit={onSubmitForm}>
                     <div className="col mt-3">
@@ -171,6 +205,14 @@ function Albums({userId}) {
                             </div>
                             <div className="col-10">
                                 <input type="text" className="form-control" value={caption} onChange={e => setCaption(e.target.value)}></input>
+                            </div>
+                        </div>
+                        <div className="row mt-2">
+                            <div className="col">
+                                <p>Tags:</p>
+                            </div>
+                            <div className="col-10">
+                                <input type="text" className="form-control" value={tags} onChange={e => setTags(e.target.value)}></input>
                             </div>
                         </div>
                         <div className="row mt-2">
