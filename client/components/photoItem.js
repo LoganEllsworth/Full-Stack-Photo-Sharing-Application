@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect } from "react";
 
-function PhotoItem({ photos }) {
+function PhotoItem({ photos, pageType }) {
 
     const deletePhoto = async (id) => {
         try {
@@ -15,11 +15,12 @@ function PhotoItem({ photos }) {
     return (
         <div className="list-group mt-2">{photos?.map(photo =>
             <li key={photo.id} className="list-group-item list-group-item-action flex-column align-items-start">
+                <p className="mb-1">{photo.user.firstname + " " + photo.user.lastname}</p>
                 <div className="d-flex w-100 justify-content-between">
                     <img src={photo.data} width="500" height="500" />
                 </div>
                 <p className="mb-1">{photo.caption}</p>
-                <button onClick={() => deletePhoto(photo.id)} className={"btn btn-danger"}>Delete Photo</button>
+                {pageType === 'profile' && <button onClick={() => deletePhoto(photo.id)} className={"btn btn-danger"}>Delete Photo</button>}
             </li>
         )}
         </div>

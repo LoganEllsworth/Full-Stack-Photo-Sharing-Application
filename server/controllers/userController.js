@@ -109,9 +109,22 @@ function checkPassword(cleartextPassword, hash) {
     });
 }
 
+const getUser = async (id) => {
+    return new Promise((resolve, reject) => {
+        pool.query(User.getUserById, [id], (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(results.rows[0]);
+            }
+        });
+    });
+}
+
 module.exports = {
     getUserById,
     createUser,
     login,
     search,
+    getUser,
 }

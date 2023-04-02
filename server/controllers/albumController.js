@@ -32,7 +32,7 @@ const getAlbumByUserId = async (req, res) => {
 const deleteAlbum = async (req, res) => {
     let id = parseInt(req.params.id);
 
-    pool.query(Album.deleteAlbumb, [id], (error, results) => {
+    pool.query(Album.deleteAlbum, [id], (error, results) => {
         if (error) throw error;
         res.status(200).send({
             success: true,
@@ -41,8 +41,21 @@ const deleteAlbum = async (req, res) => {
     });
 }
 
+const getAlbum = async (id) => {
+    return new Promise((resolve, reject) => {
+        pool.query(Album.getAlbumById, [id], (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(results.rows[0]);
+            }
+        });
+    });
+}
+
 module.exports = {
     createAlbum,
     getAlbumByUserId,
     deleteAlbum,
+    getAlbum
 }

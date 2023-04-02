@@ -6,6 +6,7 @@ const AlbumController = require('./controllers/albumController');
 const PhotoController = require('./controllers/photoController');
 const FriendController = require('./controllers/friendController');
 const TagController = require('./controllers/tagController');
+const { getAlbumByUserId } = require('./models/album');
 
 const router = Router();
 
@@ -24,7 +25,7 @@ router.get('/friend/followers/:id', FriendController.getFollowers);
 //*** ALBUM ROUTES ***//
 router.post('/album/create', AlbumController.createAlbum);
 router.get('/album/user/:id', AlbumController.getAlbumByUserId);
-router.get('/album/delete/:id', AlbumController.deleteAlbum)
+router.get('/album/delete/:id', AlbumController.deleteAlbum);
 
 //*** PHOTO ROUTES ***//
 router.get('/photo/album/:id', PhotoController.getPhotosByAlbumId);
@@ -33,6 +34,7 @@ router.get('/photo/delete/:id', PhotoController.deletePhoto);
 
 //*** TAG ROUTES ***//
 router.post('/tags/create', TagController.createTag);
+router.post('/tags/search', TagController.search);
 
 //*** COMMENT ROUTES ***//
 
