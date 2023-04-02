@@ -1,6 +1,7 @@
 import React, { Fragment, useState } from "react";
 
 import Friends from './friends';
+import PhotoItem from './photoItem';
 
 function Search({token}) {
     const [showPeople, setShowPeople] = useState(true);
@@ -71,7 +72,25 @@ function Search({token}) {
                     setSearchResults(results.rows);
                 }
             } else if (showTags) {
-                //Call to fetch Tags search results
+                try {
+                    let tagsArray = search.toUpperCase().split(' ');
+                    const body = {
+                        "search": tagsArray,
+                    }
+                    const response = await fetch("http://localhost:5000/api/tags/search", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(body)
+                    });
+                    const results = await response.json();
+                    setSuccess(results?.success);
+                    setMessage(results?.message);
+                    if (results.success) {
+                        setSearchResults(results.rows);
+                    }
+                } catch (e) {
+                    console.error(e.message);
+                }
             } else if (showComments) {
                 //Call to fetch Comments search results
             }
@@ -110,7 +129,7 @@ function Search({token}) {
                     </div>
                 </form>
                 {showPeople && searchResults && <Friends token={token} users={searchResults} update={onSubmitForm} />}
-                {showTags && <div>Tag search results...</div>}
+                {showTags && <PhotoItem photos={searchResults}/>}
                 {showComments && <div>Comment search results...</div>}
             </div>
         </Fragment>
