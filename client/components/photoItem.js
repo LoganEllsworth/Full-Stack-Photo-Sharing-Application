@@ -15,7 +15,7 @@ function PhotoItem({ photos, pageType }) {
     return (
         <div className="list-group mt-2">{photos?.map(photo =>
             <li key={photo.id} className="list-group-item list-group-item-action flex-column align-items-start">
-                <p className="mb-1">{photo.user.firstname + " " + photo.user.lastname}</p>
+                {pageType === 'search' && <p className="mb-1">{photo.user.firstname + " " + photo.user.lastname}</p>}
                 <div className="d-flex w-100 justify-content-between">
                     <img src={photo.data} width="500" height="500" />
                 </div>

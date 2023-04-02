@@ -40,20 +40,6 @@ const search = async (req, res) => {
             rows: photos,
         });
     })
-    // pool.query(`
-    // SELECT DISTINCT P.*, U.* FROM photos AS P 
-    // LEFT JOIN tags AS T ON T.photoid = P.id
-    // LEFT JOIN albums AS A ON P.albumid = A.id
-    // LEFT JOIN users AS U ON A.userid = U.id
-    // WHERE UPPER(T.name) = ANY('{${search}}')`
-    // , (error, results) => {
-    //     if (error) throw error;
-    //     res.status(200).send({
-    //         success: true,
-    //         message: `Search successful.`,
-    //         rows: results.rows,
-    //     });
-    // })
 }
 
 module.exports = {

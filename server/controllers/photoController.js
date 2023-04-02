@@ -1,15 +1,26 @@
 const pool = require('../db');
 const Photo = require('../models/photo');
 
+const AlbumController = require('./albumController');
+const UserController = require('./userController');
+
 const getPhotosByAlbumId = async (req, res) => {
     let id = parseInt(req.params.id);
-    pool.query(Photo.getPhotosByAlbumId, [id], (error, results) => {
+    pool.query(Photo.getPhotosByAlbumId, [id], async (error, results) => {
         if (error) throw error;
         if (results.rows.length) {
-            res.send({ 
+            let photos = results.rows;
+            for (const photo of photos) {
+                photo.album = await AlbumController.getAlbum(photo.albumid);
+                photo.user = await UserController.getUser(photo.album.userid);
+                //Comments
+                //Tags
+                //Likes
+            }
+            res.send({
                 success: true,
                 message: "Photos found.",
-                photos: results.rows,
+                photos: photos,
             });
         } else {
             res.send({
