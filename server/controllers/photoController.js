@@ -58,8 +58,38 @@ const deletePhoto = async (req, res) => {
     });
 }
 
+const getPhotosByTagName = async (req, res) => {
+    const { name, id } = req.body;
+    console.log(name + " " + id);
+    pool.query(Photo.getPhotosByTagName, [name, id], async (error, results) => {
+        if (error) throw error;
+        if (results.rows.length) {
+            let photos = results.rows;
+            for (const photo of photos) {
+                photo.album = await AlbumController.getAlbum(photo.albumid);
+                photo.user = await UserController.getUser(photo.album.userid);
+                //Comments
+                //Tags
+                //Likes
+            }
+            res.send({
+                success: true,
+                message: "Photos found.",
+                photos: photos,
+            });
+        } else {
+            res.send({
+                success: true,
+                message: "Empty tag.",
+                photos: null,
+            })
+        }
+    });
+}
+
 module.exports = {
     getPhotosByAlbumId,
     createPhoto,
     deletePhoto,
+    getPhotosByTagName,
 }

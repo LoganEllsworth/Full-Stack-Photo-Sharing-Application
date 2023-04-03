@@ -31,11 +31,13 @@ router.get('/album/delete/:id', AlbumController.deleteAlbum);
 router.get('/photo/album/:id', PhotoController.getPhotosByAlbumId);
 router.post('/photo/create', upload.single('photo'), PhotoController.createPhoto);
 router.get('/photo/delete/:id', PhotoController.deletePhoto);
+router.post('/photo/tag/', PhotoController.getPhotosByTagName);
 
 //*** TAG ROUTES ***//
 router.post('/tags/create', TagController.createTag);
 router.post('/tags/search', TagController.search);
 router.get('/tags/trending', TagController.getTrendingTags);
+router.get('/tags/user/:id', TagController.getTagsByUserId);
 
 //*** COMMENT ROUTES ***//
 

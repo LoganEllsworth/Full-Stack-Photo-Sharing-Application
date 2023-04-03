@@ -19,10 +19,13 @@ const createTag = async (req, res) => {
 
 const search = async (req, res) => {
     const { search } = req.body;
+    const size = search.length;
     pool.query(`
     SELECT DISTINCT P.* FROM photos AS P
-    LEFT JOIN tags AS T ON T.photoid = P.id
-    WHERE UPPER(T.name) = ANY('{${search}}')`
+    INNER JOIN tags AS T ON T.photoid = P.id
+    WHERE UPPER(T.name) = ANY('{${search}}')
+    GROUP BY P.id
+    HAVING COUNT(DISTINCT T.name) = ${size}`
     , async (error, results) => {
         if (error) throw error;
         let photos = results.rows;
@@ -52,9 +55,21 @@ const getTrendingTags = async (req, res) => {
     });
 }
 
+const getTagsByUserId = async (req, res) => {
+    let id = parseInt(req.params.id);
+    pool.query(Tag.getTagsByUserId, [id], (error, results) => {
+        if (error) throw error;
+        res.status(200).send({
+            success: true,
+            message: `Tags found.`,
+            tags: results.rows,
+        });
+    });
+}
 
 module.exports = {
     createTag,
     search,
     getTrendingTags,
+    getTagsByUserId,
 }

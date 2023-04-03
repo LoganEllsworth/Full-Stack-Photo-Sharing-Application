@@ -4,7 +4,6 @@ function PhotoItem({ photos, pageType }) {
 
     const deletePhoto = async (id) => {
         try {
-            console.log(id);
             await fetch(`http://localhost:5000/api/photo/delete/${id}`);
             window.location.href = "/profile";
         } catch (e) {
