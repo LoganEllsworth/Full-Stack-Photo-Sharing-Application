@@ -35,6 +35,7 @@ router.get('/photo/delete/:id', PhotoController.deletePhoto);
 //*** TAG ROUTES ***//
 router.post('/tags/create', TagController.createTag);
 router.post('/tags/search', TagController.search);
+router.get('/tags/trending', TagController.getTrendingTags);
 
 //*** COMMENT ROUTES ***//
 
