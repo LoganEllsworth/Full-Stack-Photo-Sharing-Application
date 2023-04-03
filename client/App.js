@@ -7,6 +7,7 @@ import RegisterUser from './components/registerUser';
 import Login from './components/login';
 import Profile from './components/profile';
 import Search from './components/search';
+import Trending from './components/trending';
 
 function App() {
 
@@ -22,7 +23,8 @@ function App() {
         <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div className="navbar-nav">
             {token && <Link to="/" className='nav-link'>Home</Link>}
-            {token && <Link to="/search" className='nav-link'>Search</Link>}
+            {token && <Link to="/trending" className='nav-link'>Trending</Link>}
+            {token && <Link to="/search/people" className='nav-link'>Search</Link>}
             {token && <Link to="/profile" className='nav-link'>Profile</Link>}
             {!token && <Link to="/login" className='nav-link'>Login</Link>}
             {token && <Link to="/login" onClick={() => setToken("")} className='nav-link'>Logout</Link>}
@@ -36,7 +38,8 @@ function App() {
         <Route path="/example/:id" element={null} />
         <Route path="/login" element={<Login setToken={setToken} />} />
         <Route path="/profile" element={<Profile token={token} />} />
-        <Route path="/search" element={<Search token={token} />} />
+        <Route path="/search/:page?/:autoSearch?" element={<Search token={token} />} />
+        <Route path="/trending" element={<Trending />} />
       </Routes>
     </BrowserRouter>
   );

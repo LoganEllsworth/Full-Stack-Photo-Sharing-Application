@@ -6,7 +6,6 @@ const UserController = require('./userController');
 
 const createTag = async (req, res) => {
     const { photoid, names } = req.body;
-    console.log(names);
     names.forEach(name => {
         pool.query(Tag.createTag, [photoid, name], (error, results) => {
             if (error) throw error;
@@ -42,7 +41,20 @@ const search = async (req, res) => {
     })
 }
 
+const getTrendingTags = async (req, res) => {
+    pool.query(Tag.getTrendingTags, (error, results) => {
+        if (error) throw error;
+        res.status(200).send({
+            success: true,
+            message: `Trends found.`,
+            tags: results.rows,
+        });
+    });
+}
+
+
 module.exports = {
     createTag,
     search,
+    getTrendingTags,
 }

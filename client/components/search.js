@@ -1,4 +1,5 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
 import Friends from './friends';
 import PhotoItem from './photoItem';
@@ -7,12 +8,24 @@ function Search({token}) {
     const [showPeople, setShowPeople] = useState(true);
     const [showTags, setShowTags] = useState(false);
     const [showComments, setShowComments] = useState(false);
-    const [search, setSearch] = useState("");
+    const [search, setSearch] = useState('');
     const [message, setMessage] = useState();
     const [success, setSuccess] = useState();
     const [searchResults, setSearchResults] = useState();
+    
+    const navigate = useNavigate();
+    const { page, autoSearch } = useParams();
+
+    useEffect(() => {
+        changeTab(page);
+        setSearch(autoSearch);
+    }, [])
 
     function changeTab(tab) {
+        navigate(`/search`);
+        setSearch('');
+        setSearchResults();
+        setMessage('');
         switch(tab) {
             case "people":
                 setShowPeople(true);
@@ -128,7 +141,7 @@ function Search({token}) {
                         <button className="btn btn-success mt-3 mb-3">Search</button>
                     </div>
                 </form>
-                {showPeople && searchResults && <Friends token={token} users={searchResults} update={onSubmitForm} />}
+                {showPeople && <Friends token={token} users={searchResults} update={onSubmitForm} />}
                 {showTags && <PhotoItem photos={searchResults}/>}
                 {showComments && <div>Comment search results...</div>}
             </div>
