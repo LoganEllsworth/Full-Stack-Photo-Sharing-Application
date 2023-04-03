@@ -2,11 +2,13 @@ import React, { Fragment, useState } from "react";
 
 import Albums from './albums';
 import Friends from './friends';
+import Tags from './tags';
 
 function Profile({token}) {
     const [showAlbums, setShowAlbums] = useState(true);
     const [showFollowing, setShowFollowing] = useState(false);
     const [showFollowers, setShowFollowers] = useState(false);
+    const [showTags, setShowTags] = useState(false);
     const [users, setUsers] = useState();
 
     function changeTab(tab) {
@@ -15,6 +17,8 @@ function Profile({token}) {
                 setShowAlbums(true);
                 setShowFollowing(false);
                 setShowFollowers(false);
+                setShowTags(false);
+                document.getElementById("tags").className = "nav-link";
                 document.getElementById("albums").className = "nav-link active";
                 document.getElementById("following").className = "nav-link";
                 document.getElementById("followers").className = "nav-link";
@@ -24,6 +28,8 @@ function Profile({token}) {
                 setShowAlbums(false);
                 setShowFollowing(true);
                 setShowFollowers(false);
+                setShowTags(false);
+                document.getElementById("tags").className = "nav-link";
                 document.getElementById("albums").className = "nav-link";
                 document.getElementById("following").className = "nav-link active";
                 document.getElementById("followers").className = "nav-link";
@@ -33,13 +39,32 @@ function Profile({token}) {
                 setShowAlbums(false);
                 setShowFollowing(false);
                 setShowFollowers(true);
+                setShowTags(false);
+                document.getElementById("tags").className = "nav-link";
                 document.getElementById("albums").className = "nav-link";
                 document.getElementById("following").className = "nav-link";
                 document.getElementById("followers").className = "nav-link active";
                 break;
-            default:
-                setShowFollowing(false);
+            case "tags":
                 setShowAlbums(false);
+                setShowFollowing(false);
+                setShowFollowers(false);
+                setShowTags(true);
+                document.getElementById("tags").className = "nav-link active";
+                document.getElementById("albums").className = "nav-link";
+                document.getElementById("following").className = "nav-link";
+                document.getElementById("followers").className = "nav-link";
+                break;
+            default:
+                setShowAlbums(true);
+                setShowFollowing(false);
+                setShowFollowers(false);
+                setShowTags(false);
+                document.getElementById("tags").className = "nav-link";
+                document.getElementById("albums").className = "nav-link active";
+                document.getElementById("following").className = "nav-link";
+                document.getElementById("followers").className = "nav-link";
+                break;
         }
     }
 
@@ -62,7 +87,6 @@ function Profile({token}) {
             if (results.success) {
                 setUsers(results.rows);
             }
-            console.log(results.rows)
         } catch (e) {
             console.error(e.message);
         }
@@ -93,9 +117,13 @@ function Profile({token}) {
                     <li className="nav-item">
                         <a className = "nav-link" id="followers" onClick={() => changeTab("followers")}>Followers</a>
                     </li>
+                    <li className="nav-item">
+                        <a className = "nav-link" id="tags" onClick={() => changeTab("tags")}>Tags</a>
+                    </li>
                 </ul>
                 {showAlbums && <Albums userId={token.id}/>}
                 {(showFollowing || showFollowers) && <Friends token={token} users={users} update={() => {window.location.href = "/profile"}}/>}
+                {showTags && <Tags userId={token.id}/>}
             </div>
         </Fragment>
     );
