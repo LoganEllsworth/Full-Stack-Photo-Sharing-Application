@@ -6,6 +6,7 @@ const AlbumController = require('./controllers/albumController');
 const PhotoController = require('./controllers/photoController');
 const FriendController = require('./controllers/friendController');
 const TagController = require('./controllers/tagController');
+const CommentController = require('./controllers/commentController');
 const { getAlbumByUserId } = require('./models/album');
 
 const router = Router();
@@ -38,6 +39,7 @@ router.post('/tags/search', TagController.search);
 router.get('/tags/trending', TagController.getTrendingTags);
 
 //*** COMMENT ROUTES ***//
+router.post('/comment/create', CommentController.createComment);
 
 //*** LIKE ROUTES ***//
 
