@@ -3,6 +3,7 @@ const Tag = require('../models/tag');
 
 const AlbumController = require('./albumController');
 const UserController = require('./userController');
+const LikeController = require('./likeController');
 
 const createTag = async (req, res) => {
     const { photoid, names } = req.body;
@@ -34,7 +35,7 @@ const search = async (req, res) => {
             photo.user = await UserController.getUser(photo.album.userid);
             //Comments
             //Tags
-            //Likes
+            photo.likes = await LikeController.getLikes(photo.id);
         }
         res.status(200).send({
             success: true,

@@ -6,7 +6,7 @@ const AlbumController = require('./controllers/albumController');
 const PhotoController = require('./controllers/photoController');
 const FriendController = require('./controllers/friendController');
 const TagController = require('./controllers/tagController');
-const { getAlbumByUserId } = require('./models/album');
+const LikeController = require('./controllers/likeController');
 
 const router = Router();
 
@@ -42,5 +42,8 @@ router.get('/tags/user/:id', TagController.getTagsByUserId);
 //*** COMMENT ROUTES ***//
 
 //*** LIKE ROUTES ***//
+router.post('/likes/create', LikeController.createLike);
+router.post('/likes/delete', LikeController.deleteLike);
+router.get('/likes/photo/:id', LikeController.getLikesByPhotoId);
 
 module.exports = router;
