@@ -60,7 +60,6 @@ const deletePhoto = async (req, res) => {
 
 const getPhotosByTagName = async (req, res) => {
     const { name, id } = req.body;
-    console.log(name + " " + id);
     pool.query(Photo.getPhotosByTagName, [name, id], async (error, results) => {
         if (error) throw error;
         if (results.rows.length) {

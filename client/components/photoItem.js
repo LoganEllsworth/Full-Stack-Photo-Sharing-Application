@@ -2,6 +2,10 @@ import React, { Fragment, useState, useEffect } from "react";
 
 function PhotoItem({ photos, pageType }) {
 
+    useEffect(() => {
+        console.log(photos);
+    }, [])
+
     const deletePhoto = async (id) => {
         try {
             await fetch(`http://localhost:5000/api/photo/delete/${id}`);
