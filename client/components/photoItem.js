@@ -2,6 +2,8 @@ import React, { Fragment, useState, useEffect } from "react";
 import './styles/photoItem.css';
 import './commentItem';
 import CommentItems from "./commentItem";
+import LikeItem from "./likeItem";
+import TagItem from "./tagItem";
 
 
 function PhotoItem({ userId, photos, pageType }) {
@@ -30,8 +32,6 @@ function PhotoItem({ userId, photos, pageType }) {
                 "text": inputVal,
                 "createdAt": new Date().toLocaleString()
             }
-            console.log(photos);
-            console.log(body.userid + " " + body.photoid + " " + body.text + " " + body.createdAt)
             const response = await fetch("http://localhost:5000/api/comment/create", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -45,10 +45,6 @@ function PhotoItem({ userId, photos, pageType }) {
             console.error(e.message);
         }
     }
-
-    useEffect(() => {
-        console.log(photos);
-    }, [])
 
     const deletePhoto = async (id) => {
         try {
@@ -92,9 +88,10 @@ function PhotoItem({ userId, photos, pageType }) {
     return (
         <div className="list-group mt-2">{photos?.map(photo =>
             <li key={photo.id} className="list-group-item list-group-item-action flex-column align-items-start">
-                {pageType === 'search' && <p className="mb-1">{photo.user.firstname + " " + photo.user.lastname}</p>}
-                <div className="picture-tags">
-                    <p></p>
+                {pageType === 'search' && <p className="mb-1">User: {photo.user.firstname + " " + photo.user.lastname}</p>}
+                <div className="mb-3">
+                    <p>Tags:</p>
+                    {<TagItem tags={photo.tags} />}
                 </div>
                 <div className="d-flex w-100 justify-content-between">
                     <img src={photo.data} width="500" height="500" />
@@ -108,10 +105,13 @@ function PhotoItem({ userId, photos, pageType }) {
                                 <button onClick={() => { setSelectedPhoto(photo.id) }} className="send-comment">Send</button>
                             </form>
                         </div>
-                        
                     </div>
                 </div>
-                <p className="mb-1">{photo.caption}</p>
+                <p className="mb-1">Caption: {photo.caption}</p>
+                <div className="mb-3">
+                    <p>Likes:</p>
+                    {<LikeItem likes={photo.likes} />}
+                </div>
                 <button onClick={() => likePhoto(photo)} className={photo.likes.some(like => like.userid === userId) ? "btn btn-danger" : "btn btn-success"}>{photo.likes.length} &lt;3</button>
                 {pageType === 'profile' && <button onClick={() => deletePhoto(photo.id)} className={"btn btn-danger"}>Delete Photo</button>}
             </li>

@@ -142,7 +142,7 @@ function Search({token}) {
                     </div>
                 </form>
                 {showPeople && <Friends token={token} users={searchResults} update={onSubmitForm} />}
-                {showTags && <PhotoItem userId={token.id} photos={searchResults}/>}
+                {showTags && <PhotoItem userId={token.id} photos={searchResults} pageType={"search"}/>}
                 {showComments && <div>Comment search results...</div>}
             </div>
         </Fragment>
