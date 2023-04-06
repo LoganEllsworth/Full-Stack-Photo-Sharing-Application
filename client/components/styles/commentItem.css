@@ -1,0 +1,13 @@
+.text-container {
+  width: 330px;
+}
+
+.name-date {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+}
+
+.sent-comment {
+  font-size: 14px;
+}

@@ -6,6 +6,7 @@ const AlbumController = require('./controllers/albumController');
 const PhotoController = require('./controllers/photoController');
 const FriendController = require('./controllers/friendController');
 const TagController = require('./controllers/tagController');
+const CommentController = require('./controllers/commentController');
 const LikeController = require('./controllers/likeController');
 
 const router = Router();
@@ -40,6 +41,7 @@ router.get('/tags/trending', TagController.getTrendingTags);
 router.get('/tags/user/:id', TagController.getTagsByUserId);
 
 //*** COMMENT ROUTES ***//
+router.post('/comment/create', CommentController.createComment);
 
 //*** LIKE ROUTES ***//
 router.post('/likes/create', LikeController.createLike);

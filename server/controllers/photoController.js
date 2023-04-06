@@ -3,6 +3,7 @@ const Photo = require('../models/photo');
 
 const AlbumController = require('./albumController');
 const UserController = require('./userController');
+const CommentsController = require('./commentController');
 const LikeController = require('./likeController');
 
 const getPhotosByAlbumId = async (req, res) => {
@@ -14,7 +15,7 @@ const getPhotosByAlbumId = async (req, res) => {
             for (const photo of photos) {
                 photo.album = await AlbumController.getAlbum(photo.albumid);
                 photo.user = await UserController.getUser(photo.album.userid);
-                //Comments
+                photo.comments = await CommentsController.getComments(photo.id);
                 //Tags
                 photo.likes = await LikeController.getLikes(photo.id);
             }
