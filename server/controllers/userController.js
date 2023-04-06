@@ -76,7 +76,7 @@ const search = async (req, res) => {
     CASE WHEN F.destination IS NULL THEN FALSE ELSE TRUE END AS friends
     FROM users AS U
     LEFT JOIN user_friend AS F ON (U.id = F.destination AND F.origin = ${origin})
-    WHERE (firstname ILIKE '%${search}%' OR lastname ILIKE '%${search}%' OR email ILIKE '%${search}%') AND U.id != ${origin}`
+    WHERE (firstname ILIKE '%${search}%' OR lastname ILIKE '%${search}%' OR email ILIKE '%${search}%' OR (firstname ||' '|| lastname) ILIKE '%${search}%') AND U.id != ${origin}`
     , (error, results) => {
         if (error) throw error;
         res.status(200).send({

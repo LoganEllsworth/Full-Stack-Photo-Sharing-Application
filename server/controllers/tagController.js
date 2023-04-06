@@ -3,6 +3,8 @@ const Tag = require('../models/tag');
 
 const AlbumController = require('./albumController');
 const UserController = require('./userController');
+const CommentsController = require('./commentController');
+const LikeController = require('./likeController');
 
 const createTag = async (req, res) => {
     const { photoid, names } = req.body;
@@ -32,9 +34,9 @@ const search = async (req, res) => {
         for (const photo of photos) {
             photo.album = await AlbumController.getAlbum(photo.albumid);
             photo.user = await UserController.getUser(photo.album.userid);
-            //Comments
-            //Tags
-            //Likes
+            photo.comments = await CommentsController.getComments(photo.id);
+            photo.tags = await getTags(photo.id);
+            photo.likes = await LikeController.getLikes(photo.id);
         }
         res.status(200).send({
             success: true,
@@ -67,9 +69,22 @@ const getTagsByUserId = async (req, res) => {
     });
 }
 
+const getTags = (id) => {
+    return new Promise((resolve, reject) => {
+        pool.query(Tag.getTagByPhotoId, [id], (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(results.rows);
+            }
+        });
+    });
+}
+
 module.exports = {
     createTag,
     search,
     getTrendingTags,
     getTagsByUserId,
+    getTags,
 }

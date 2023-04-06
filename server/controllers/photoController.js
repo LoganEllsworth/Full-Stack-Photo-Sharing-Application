@@ -4,6 +4,8 @@ const Photo = require('../models/photo');
 const AlbumController = require('./albumController');
 const UserController = require('./userController');
 const CommentsController = require('./commentController');
+const LikeController = require('./likeController');
+const TagController = require('./tagController');
 
 const getPhotosByAlbumId = async (req, res) => {
     let id = parseInt(req.params.id);
@@ -15,8 +17,8 @@ const getPhotosByAlbumId = async (req, res) => {
                 photo.album = await AlbumController.getAlbum(photo.albumid);
                 photo.user = await UserController.getUser(photo.album.userid);
                 photo.comments = await CommentsController.getComments(photo.id);
-                //Tags
-                //Likes
+                photo.tags = await TagController.getTags(photo.id);
+                photo.likes = await LikeController.getLikes(photo.id);
             }
             res.send({
                 success: true,
@@ -68,9 +70,9 @@ const getPhotosByTagName = async (req, res) => {
             for (const photo of photos) {
                 photo.album = await AlbumController.getAlbum(photo.albumid);
                 photo.user = await UserController.getUser(photo.album.userid);
-                //Comments
-                //Tags
-                //Likes
+                photo.comments = await CommentsController.getComments(photo.id);
+                photo.tags = await TagController.getTags(photo.id);
+                photo.likes = await LikeController.getLikes(photo.id);
             }
             res.send({
                 success: true,

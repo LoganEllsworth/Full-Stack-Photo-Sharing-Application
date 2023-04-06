@@ -58,7 +58,7 @@ function Tags({userId}) {
             </div>}
             {viewTag && <div className="mt-2">
                 <button className="btn btn-secondary" onClick={() => setViewTag(false)}>Back</button>
-                <PhotoItem photos={photos} pageType={'profile'}/>
+                <PhotoItem userId={userId} photos={photos} pageType={'profile'}/>
             </div>}
         </Fragment>
     );
