@@ -232,7 +232,7 @@ function Albums({userId}) {
                         </div>
                     </div>
                 </form>}
-                <PhotoItem photos={photos} pageType={'profile'}/>
+                <PhotoItem userId={userId} photos={photos} pageType={'profile'}/>
             </div>}
         </Fragment>
     );
