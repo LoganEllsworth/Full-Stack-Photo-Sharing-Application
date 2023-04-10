@@ -34,6 +34,7 @@ router.get('/photo/album/:id', PhotoController.getPhotosByAlbumId);
 router.post('/photo/create', upload.single('photo'), PhotoController.createPhoto);
 router.get('/photo/delete/:id', PhotoController.deletePhoto);
 router.post('/photo/tag/', PhotoController.getPhotosByTagName);
+router.get('/photo/new', PhotoController.getNewPhotos);
 
 //*** TAG ROUTES ***//
 router.post('/tags/create', TagController.createTag);

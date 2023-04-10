@@ -8,6 +8,7 @@ import Login from './components/login';
 import Profile from './components/profile';
 import Search from './components/search';
 import Trending from './components/trending';
+import Home from './components/home';
 
 function App() {
 
@@ -33,9 +34,8 @@ function App() {
         </div>
       </nav>
       <Routes>
-        <Route exact path="/" element={token ? null : <Login setToken={setToken}/>} />
+        <Route exact path="/" element={token ? <Home token={token}/> : <Login setToken={setToken}/>} />
         <Route exact path="/register" element={<RegisterUser setToken={setToken}/>} />
-        <Route path="/example/:id" element={null} />
         <Route path="/login" element={<Login setToken={setToken} />} />
         <Route path="/profile" element={<Profile token={token} />} />
         <Route path="/search/:page?/:autoSearch?" element={<Search token={token} />} />
