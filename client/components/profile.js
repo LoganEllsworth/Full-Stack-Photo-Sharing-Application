@@ -27,8 +27,8 @@ function Profile({token}) {
                 setShowTags(false);
                 document.getElementById("tags").className = "nav-link";
                 document.getElementById("albums").className = "nav-link active";
-                document.getElementById("following").className = "nav-link";
-                document.getElementById("followers").className = "nav-link";
+                token.id === user.id ? document.getElementById("following").className = "nav-link" : null;
+                token.id === user.id ? document.getElementById("followers").className = "nav-link" : null;
                 break;
             case "following":
                 getFriends();
@@ -38,8 +38,8 @@ function Profile({token}) {
                 setShowTags(false);
                 document.getElementById("tags").className = "nav-link";
                 document.getElementById("albums").className = "nav-link";
-                document.getElementById("following").className = "nav-link active";
-                document.getElementById("followers").className = "nav-link";
+                token.id === user.id ? document.getElementById("following").className = "nav-link active" : null;
+                token.id === user.id ? document.getElementById("followers").className = "nav-link" : null;
                 break;
             case "followers":
                 getFollowers();
@@ -49,8 +49,8 @@ function Profile({token}) {
                 setShowTags(false);
                 document.getElementById("tags").className = "nav-link";
                 document.getElementById("albums").className = "nav-link";
-                document.getElementById("following").className = "nav-link";
-                document.getElementById("followers").className = "nav-link active";
+                token.id === user.id ? document.getElementById("following").className = "nav-link" : null;
+                token.id === user.id ? document.getElementById("followers").className = "nav-link active" : null;
                 break;
             case "tags":
                 setShowAlbums(false);
@@ -59,8 +59,8 @@ function Profile({token}) {
                 setShowTags(true);
                 document.getElementById("tags").className = "nav-link active";
                 document.getElementById("albums").className = "nav-link";
-                document.getElementById("following").className = "nav-link";
-                document.getElementById("followers").className = "nav-link";
+                token.id === user.id ? document.getElementById("following").className = "nav-link" : null;
+                token.id === user.id ? document.getElementById("followers").className = "nav-link" : null;
                 break;
             default:
                 setShowAlbums(true);
@@ -69,8 +69,8 @@ function Profile({token}) {
                 setShowTags(false);
                 document.getElementById("tags").className = "nav-link";
                 document.getElementById("albums").className = "nav-link active";
-                document.getElementById("following").className = "nav-link";
-                document.getElementById("followers").className = "nav-link";
+                token.id === user.id ? document.getElementById("following").className = "nav-link" : null;
+                token.id === user.id ? document.getElementById("followers").className = "nav-link" : null;
                 break;
         }
     }
@@ -131,17 +131,17 @@ function Profile({token}) {
                     <li className="nav-item">
                         <a className = "nav-link active" id="albums" onClick={() => changeTab("albums")}>Albums</a>
                     </li>
-                    <li className="nav-item">
+                    {token.id === user.id && <li className="nav-item">
                         <a className = "nav-link" id="following" onClick={() => changeTab("following")}>Following</a>
-                    </li>
-                    <li className="nav-item">
+                    </li>}
+                    {token.id === user.id && <li className="nav-item">
                         <a className = "nav-link" id="followers" onClick={() => changeTab("followers")}>Followers</a>
-                    </li>
+                    </li>}
                     <li className="nav-item">
                         <a className = "nav-link" id="tags" onClick={() => changeTab("tags")}>Tags</a>
                     </li>
                 </ul>
-                {showAlbums && <Albums userId={user.id}/>}
+                {showAlbums && <Albums userId={user.id} edit={token.id === user.id ? true : false}/>}
                 {(showFollowing || showFollowers) && <Friends token={user} users={users} update={() => {window.location.href = `/profile/${user.id}`}}/>}
                 {showTags && <Tags userId={user.id}/>}
             </div>
