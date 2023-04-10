@@ -1,5 +1,5 @@
-import React, { Fragment, useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Friends({token, users, update}) {
     const [selectedUser, setSelectedUser] = useState();
