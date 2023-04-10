@@ -1,5 +1,5 @@
 .text-container {
-  width: 330px;
+  width: 320px;
 }
 
 .name-date {
@@ -10,4 +10,12 @@
 
 .sent-comment {
   font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.delete-comment {
+  width: 70px;
+  height: 25px;
+  background-color: red;
 }

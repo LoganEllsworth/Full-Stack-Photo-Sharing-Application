@@ -44,6 +44,8 @@ router.get('/tags/user/:id', TagController.getTagsByUserId);
 
 //*** COMMENT ROUTES ***//
 router.post('/comment/create', CommentController.createComment);
+router.get('/comment/delete/:id', CommentController.deleteComment);
+router.post('/comment/searched/', CommentController.search)
 
 //*** LIKE ROUTES ***//
 router.post('/likes/create', LikeController.createLike);
