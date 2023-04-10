@@ -121,10 +121,22 @@ const getUser = async (id) => {
     });
 }
 
+const getLeaderboard = async (req, res) => {
+    pool.query(User.getLeaderboard, (error, results) => {
+        if (error) throw error;
+        res.status(200).send({
+            success: true,
+            message: `Leaderboard updated.`,
+            rows: results.rows,
+        });
+    })
+}
+
 module.exports = {
     getUserById,
     createUser,
     login,
     search,
     getUser,
+    getLeaderboard,
 }
