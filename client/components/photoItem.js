@@ -26,6 +26,7 @@ function PhotoItem({ userId, photos, pageType }) {
             return;
         }
         try {
+            
             const body = {
                 "userid": userId,
                 "photoid": selectedPhoto,
@@ -37,6 +38,7 @@ function PhotoItem({ userId, photos, pageType }) {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(body)
             });
+            
             const results = await response.json();
             setSuccess(results?.success);
             setMessage(results?.message);
@@ -97,7 +99,9 @@ function PhotoItem({ userId, photos, pageType }) {
                     <img src={photo.data} width="500" height="500" />
                     <div className="comment-container">
                         <div className="comment-box">
-                            {<CommentItems comments={photo.comments} />}
+                        
+                            {<CommentItems comments={photo.comments} pageType={pageType} />}
+                        
                         </div>
                         <div className="message-container">
                             <form onSubmit={onSubmitForm}>

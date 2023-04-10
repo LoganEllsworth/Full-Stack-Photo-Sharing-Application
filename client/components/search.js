@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import Friends from './friends';
 import PhotoItem from './photoItem';
+import CommentItems from "./commentItem";
 
 function Search({token}) {
     const [showPeople, setShowPeople] = useState(true);
@@ -12,9 +13,11 @@ function Search({token}) {
     const [message, setMessage] = useState();
     const [success, setSuccess] = useState();
     const [searchResults, setSearchResults] = useState();
+    const [returnedComments, setSearchedComments] = useState();
     
     const navigate = useNavigate();
     const { page, autoSearch } = useParams();
+
 
     useEffect(() => {
         changeTab(page);
@@ -106,6 +109,26 @@ function Search({token}) {
                 }
             } else if (showComments) {
                 //Call to fetch Comments search results
+                try {
+                    
+                    const body = {
+                        "search": search,
+                    }
+                    const response = await fetch("http://localhost:5000/api/comment/searched", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(body)
+                    });
+                    const results = await response.json();
+                    setSuccess(results?.success);
+                    setMessage(results?.message);
+                    if (results.success) {
+                        console.log(results.rows);
+                        setSearchResults(results.rows);
+                    }
+                } catch (e) {
+                    console.error(e.message);
+                }
             }
         } catch (e) {
             console.error(e.message);
@@ -143,7 +166,16 @@ function Search({token}) {
                 </form>
                 {showPeople && <Friends token={token} users={searchResults} update={onSubmitForm} />}
                 {showTags && <PhotoItem userId={token.id} photos={searchResults} pageType={"search"}/>}
-                {showComments && <div>Comment search results...</div>}
+                {showComments && 
+                    
+                        <div className="list-group mt-2">{searchResults?.map(comments =>
+                            <li className="list-group-item d-flex justify-content-between align-items-center">
+                                {comments.firstname + " " + comments.lastname}
+                                {<span className="badge badge-pill">{comments.count}</span >}
+                            </li>)}
+                        </div>
+                    
+                }
             </div>
         </Fragment>
     );
