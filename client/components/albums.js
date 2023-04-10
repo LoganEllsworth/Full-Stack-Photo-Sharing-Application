@@ -3,7 +3,7 @@ import ImageUploader from 'react-images-upload';
 import AlbumItem from "./albumItem";
 import PhotoItem from "./photoItem";
 
-function Albums({userId}) {
+function Albums({userId, edit}) {
     const [newAlbum, setNewAlbum] = useState(false);
     const [albums, setAlbums] = useState();
     const [album, setAlbum] = useState();
@@ -164,7 +164,7 @@ function Albums({userId}) {
 
     return (
         <Fragment>
-            {!newAlbum && !viewAlbum && <button className="btn btn-success mt-2" onClick={() => setNewAlbum(!newAlbum)}>+ New</button>}
+            {!newAlbum && !viewAlbum  && edit && <button className="btn btn-success mt-2" onClick={() => setNewAlbum(!newAlbum)}>+ New</button>}
             {newAlbum &&
                 <form id="album" onSubmit={onSubmitForm}>
                     <div className="col  mt-3">
@@ -192,8 +192,8 @@ function Albums({userId}) {
             </div>}
             {viewAlbum && <div className="mt-2">
                 <button className="btn btn-secondary" onClick={() => setViewAlbum(false)}>Back</button>
-                <button className="btn btn-success" onClick={() => setNewPhoto(true)}>+ Photo</button>
-                <button className="btn btn-danger" onClick={() => deleteAlbum()}>Delete Album</button>
+                {edit && <button className="btn btn-success" onClick={() => setNewPhoto(true)}>+ Photo</button>}
+                {edit && <button className="btn btn-danger" onClick={() => deleteAlbum()}>Delete Album</button>}
                 {newPhoto &&
                 <form id="photo" onSubmit={onSubmitForm}>
                     <div className="col mt-3">
@@ -232,7 +232,7 @@ function Albums({userId}) {
                         </div>
                     </div>
                 </form>}
-                <PhotoItem userId={userId} photos={photos} pageType={'profile'}/>
+                <PhotoItem userId={userId} photos={photos} pageType={edit ? 'profile' : 'search'}/>
             </div>}
         </Fragment>
     );
