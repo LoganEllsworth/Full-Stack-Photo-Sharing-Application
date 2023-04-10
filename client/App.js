@@ -37,7 +37,7 @@ function App() {
         <Route exact path="/" element={token ? <Home token={token}/> : <Login setToken={setToken}/>} />
         <Route exact path="/register" element={<RegisterUser setToken={setToken}/>} />
         <Route path="/login" element={<Login setToken={setToken} />} />
-        <Route path="/profile" element={<Profile token={token} />} />
+        <Route path="/profile/:id?" element={<Profile token={token} />} />
         <Route path="/search/:page?/:autoSearch?" element={<Search token={token} />} />
         <Route path="/trending" element={<Trending />} />
       </Routes>

@@ -7,7 +7,11 @@ const getUserById = (req, res) => {
     let id = parseInt(req.params.id);
     pool.query(User.getUserById, [id], (error, results) => {
         if (error) throw error;
-        res.status(200).json(results.rows[0]);
+        res.status(200).send({
+            success: true,
+            message: `User found.`,
+            user: results.rows[0],
+        });
     })
 };
 

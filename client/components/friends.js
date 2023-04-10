@@ -1,6 +1,14 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
 function Friends({token, users, update}) {
+    const [selectedUser, setSelectedUser] = useState();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (selectedUser)
+            navigate(`/profile/${selectedUser.id}`);
+    }, [selectedUser])
 
     const addFriend = async (userId) => {
         try {
@@ -36,7 +44,7 @@ function Friends({token, users, update}) {
     }
 
     return (<div className="list-group mt-2">{users?.map(user =>
-        <li key={user.id} className="list-group-item d-flex justify-content-between align-items-center">
+        <li onClick={() => setSelectedUser(user)} key={user.id} className="list-group-item d-flex justify-content-between align-items-center">
             {user.firstname + " " + user.lastname}
             {!user.friends && <button className="badge badge-primary badge-pill" id={user.id} onClick={async (e) => { await addFriend(user.id); update(e); }}>Add Friend</button>}
             {user.friends && <button className="badge badge-pill" id={user.id} onClick={async (e) => { await removeFriend(user.id); update(e); }}>Remove Friend</button>}
