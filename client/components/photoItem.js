@@ -14,10 +14,6 @@ function PhotoItem({ userId, photos, pageType }) {
     const [success, setSuccess] = useState();
     const [selectedPhoto, setSelectedPhoto] = useState();
 
-    useEffect(() => {
-        console.log(photos);
-    }, [])
-
     const onSubmitForm = async (e) => {
         e.preventDefault();
         if (!inputVal) {
