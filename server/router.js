@@ -41,6 +41,7 @@ router.post('/tags/create', TagController.createTag);
 router.post('/tags/search', TagController.search);
 router.get('/tags/trending', TagController.getTrendingTags);
 router.get('/tags/user/:id', TagController.getTagsByUserId);
+router.get('/tags/ymal/:id', TagController.getYMAL);
 
 //*** COMMENT ROUTES ***//
 router.post('/comment/create', CommentController.createComment);

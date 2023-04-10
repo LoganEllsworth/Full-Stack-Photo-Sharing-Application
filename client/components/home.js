@@ -7,16 +7,14 @@ function Home({token}) {
     const [showPosts, setShowPosts] = useState(true);
     const [showFriendRecs, setShowFriendRecs] = useState(false);
     const [showYMAL, setShowYMAL] = useState(false);
-    const [message, setMessage] = useState();
-    const [success, setSuccess] = useState();
     const [newPosts, setNewPosts] = useState();
+    const [ymal, setYMAL] = useState();
 
     useEffect(() => {
         getNewPosts();
     }, [])
 
     function changeTab(tab) {
-        setMessage('');
         switch(tab) {
             case "posts":
                 getNewPosts();
@@ -68,6 +66,15 @@ function Home({token}) {
     }
 
     const getYMAL = async () => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/tags/ymal/${token.id}`);
+            const results = await response.json();
+            if (results.success) {
+                setYMAL(results?.rows);
+            }
+        } catch (e) {
+            console.error(e.message);
+        }
     }
 
     return (
@@ -87,7 +94,7 @@ function Home({token}) {
                 </ul>
                 {showPosts && <PhotoItem userId={token.userid} photos={newPosts} pageType={"search"}/>}
                 {showFriendRecs && <div>Friend Recs page...</div>}
-                {showYMAL && <div>YMAL page...</div>}
+                {showYMAL && <PhotoItem userId={token.userid} photos={ymal} pageType={"search"}/>}
             </div>
         </Fragment>
     );

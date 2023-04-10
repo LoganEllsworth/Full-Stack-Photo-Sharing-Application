@@ -81,10 +81,31 @@ const getTags = (id) => {
     });
 }
 
+const getYMAL = async (req, res) => {
+    let id = parseInt(req.params.id);
+    pool.query(Tag.getYMAL, [id], async (error, results) => {
+        if (error) throw error;
+        let photos = results.rows;
+        for (const photo of photos) {
+            photo.album = await AlbumController.getAlbum(photo.albumid);
+            photo.user = await UserController.getUser(photo.album.userid);
+            photo.comments = await CommentsController.getComments(photo.id);
+            photo.tags = await getTags(photo.id);
+            photo.likes = await LikeController.getLikes(photo.id);
+        }
+        res.status(200).send({
+            success: true,
+            message: `Search successful.`,
+            rows: photos,
+        });
+    })
+}
+
 module.exports = {
     createTag,
     search,
     getTrendingTags,
     getTagsByUserId,
     getTags,
+    getYMAL,
 }
