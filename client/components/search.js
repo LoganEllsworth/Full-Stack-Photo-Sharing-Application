@@ -3,7 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import Friends from './friends';
 import PhotoItem from './photoItem';
-import CommentItems from "./commentItem";
 
 function Search({token}) {
     const [showPeople, setShowPeople] = useState(true);
