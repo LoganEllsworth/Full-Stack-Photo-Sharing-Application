@@ -16,6 +16,7 @@ router.get('/user/:id', UserController.getUserById);
 router.post('/user/register', UserController.createUser);
 router.post('/user/login', UserController.login);
 router.post('/user/search', UserController.search);
+router.post('/user/leaderboard', UserController.getLeaderboard);
 
 //*** FRIEND ROUTES ***//
 router.post('/friend/add', FriendController.addFriend);
