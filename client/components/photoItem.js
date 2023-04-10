@@ -1,7 +1,9 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+
 import './styles/photoItem.css';
 import './commentItem';
+
 import CommentItems from "./commentItem";
 import LikeItem from "./likeItem";
 import TagItem from "./tagItem";
@@ -9,10 +11,7 @@ import TagItem from "./tagItem";
 
 function PhotoItem({ userId, photos, pageType }) {
 
-    const [commentText, setNewComment] = useState(false);
     const [inputVal, writtenComment] = useState('');
-    const [message, setMessage] = useState();
-    const [success, setSuccess] = useState();
     const [selectedPhoto, setSelectedPhoto] = useState();
     const [selectedUser, setSelectedUser] = useState();
     const navigate = useNavigate();
@@ -30,22 +29,17 @@ function PhotoItem({ userId, photos, pageType }) {
             return;
         }
         try {
-            
             const body = {
                 "userid": userId,
                 "photoid": selectedPhoto,
                 "text": inputVal,
                 "createdAt": new Date().toLocaleString()
             }
-            const response = await fetch("http://localhost:5000/api/comment/create", {
+            await fetch("http://localhost:5000/api/comment/create", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(body)
             });
-            
-            const results = await response.json();
-            setSuccess(results?.success);
-            setMessage(results?.message);
             window.location.href = "/profile";
         } catch (e) {
             console.error(e.message);

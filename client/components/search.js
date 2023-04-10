@@ -13,7 +13,6 @@ function Search({token}) {
     const [message, setMessage] = useState();
     const [success, setSuccess] = useState();
     const [searchResults, setSearchResults] = useState();
-    const [returnedComments, setSearchedComments] = useState();
     
     const navigate = useNavigate();
     const { page, autoSearch } = useParams();
@@ -108,9 +107,7 @@ function Search({token}) {
                     console.error(e.message);
                 }
             } else if (showComments) {
-                //Call to fetch Comments search results
                 try {
-                    
                     const body = {
                         "search": search,
                     }
@@ -123,7 +120,6 @@ function Search({token}) {
                     setSuccess(results?.success);
                     setMessage(results?.message);
                     if (results.success) {
-                        console.log(results.rows);
                         setSearchResults(results.rows);
                     }
                 } catch (e) {
@@ -165,16 +161,14 @@ function Search({token}) {
                     </div>
                 </form>
                 {showPeople && <Friends token={token} users={searchResults} update={onSubmitForm} />}
-                {showTags && <PhotoItem userId={token.id} photos={searchResults} pageType={"search"}/>}
-                {showComments && 
-                    
-                        <div className="list-group mt-2">{searchResults?.map(comments =>
-                            <li className="list-group-item d-flex justify-content-between align-items-center">
-                                {comments.firstname + " " + comments.lastname}
-                                {<span className="badge badge-pill">{comments.count}</span >}
-                            </li>)}
-                        </div>
-                    
+                {showTags && <PhotoItem userId={token.id} photos={searchResults} pageType={"search"} />}
+                {showComments &&
+                    <div className="list-group mt-2">{searchResults?.map(comments =>
+                        <li className="list-group-item d-flex justify-content-between align-items-center">
+                            {comments.firstname + " " + comments.lastname}
+                            {<span className="badge badge-pill">{comments.count}</span >}
+                        </li>)}
+                    </div>
                 }
             </div>
         </Fragment>
