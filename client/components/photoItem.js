@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import './styles/photoItem.css';
 import './commentItem';
 import CommentItems from "./commentItem";
@@ -13,6 +14,13 @@ function PhotoItem({ userId, photos, pageType }) {
     const [message, setMessage] = useState();
     const [success, setSuccess] = useState();
     const [selectedPhoto, setSelectedPhoto] = useState();
+    const [selectedUser, setSelectedUser] = useState();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (selectedUser)
+            navigate(`/profile/${selectedUser.id}`);
+    }, [selectedUser])
 
     const onSubmitForm = async (e) => {
         e.preventDefault();
@@ -84,7 +92,8 @@ function PhotoItem({ userId, photos, pageType }) {
     return (
         <div className="list-group mt-2">{photos?.map(photo =>
             <li key={photo.id} className="list-group-item list-group-item-action flex-column align-items-start">
-                {pageType === 'search' && <p className="mb-1">User: {photo.user.firstname + " " + photo.user.lastname}</p>}
+                {pageType === 'search' && <p>User:</p>}
+                {pageType === 'search' && <div onClick={() => setSelectedUser(photo.user)} className="list-group-item mb-1">{photo.user.firstname + " " + photo.user.lastname}</div>}
                 <div className="mb-3">
                     <p>Tags:</p>
                     {<TagItem tags={photo.tags} />}

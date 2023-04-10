@@ -20,7 +20,7 @@ function Trending() {
 
     useEffect(() => {
         if (selectedUser)
-            navigate(`/search/people/${selectedUser.firstname} ${selectedUser.lastname}`);
+            navigate(`/profile/${selectedUser.id}`);
     }, [selectedUser])
 
     const getTrendingTags = async () => {
@@ -53,7 +53,7 @@ function Trending() {
             <div className="w-50 bg-light rounded mx-auto">
                 <h1>Contribution Scores</h1>
                 {leaderboard && <div className="list-group mt-2">{leaderboard?.map(user =>
-                    <li key={user.id} className="list-group-item d-flex justify-content-between align-items-center">
+                    <li onClick={() => setSelectedUser(user)} key={user.id} className="list-group-item d-flex justify-content-between align-items-center">
                         {user.firstname} {user.lastname}
                         {<span className="badge badge-pill">{user.score ? user.score : 0}</span >}
                     </li>)}

@@ -1,15 +1,22 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
 import Albums from './albums';
 import Friends from './friends';
 import Tags from './tags';
 
 function Profile({token}) {
-    const [showAlbums, setShowAlbums] = useState(true);
+    const [showAlbums, setShowAlbums] = useState(false);
     const [showFollowing, setShowFollowing] = useState(false);
     const [showFollowers, setShowFollowers] = useState(false);
     const [showTags, setShowTags] = useState(false);
     const [users, setUsers] = useState();
+    const [user, setUser] = useState(token);
+    const { id } = useParams();
+
+    useEffect(() => {
+        getUserById(id ? id : user.id);
+    }, [])
 
     function changeTab(tab) {
         switch(tab) {
@@ -68,9 +75,22 @@ function Profile({token}) {
         }
     }
 
+    const getUserById = async (userid) => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/user/${userid}`);
+            const results = await response.json();
+            if (results.success) {
+                setUser(results.user);
+                setShowAlbums(true);
+            }
+        } catch (e) {
+            console.error(e.message);
+        }
+    }
+
     const getFriends = async () => {
         try {
-            const response = await fetch(`http://localhost:5000/api/friend/friends/${token.id}`);
+            const response = await fetch(`http://localhost:5000/api/friend/friends/${user.id}`);
             const results = await response.json();
             if (results.success) {
                 setUsers(results.rows);
@@ -82,7 +102,7 @@ function Profile({token}) {
 
     const getFollowers = async () => {
         try {
-            const response = await fetch(`http://localhost:5000/api/friend/followers/${token.id}`);
+            const response = await fetch(`http://localhost:5000/api/friend/followers/${user.id}`);
             const results = await response.json();
             if (results.success) {
                 setUsers(results.rows);
@@ -96,15 +116,15 @@ function Profile({token}) {
         <Fragment>
             <div className="w-50 bg-light rounded mx-auto">
                 <div className="container">
-                    <h1>{token.firstname + " " + token.lastname}</h1>
-                    {token.hometown && <div className="row">
-                        Hometown: {token.hometown}
+                    <h1>{user.firstname + " " + user.lastname}</h1>
+                    {user.hometown && <div className="row">
+                        Hometown: {user.hometown}
                     </div>}
-                    {token.gender && <div className="row">
-                        Gender: {token.gender}
+                    {user.gender && <div className="row">
+                        Gender: {user.gender}
                     </div>}
                     <div className="row">
-                        Birthday: {new Date(token.dob).toLocaleDateString()}
+                        Birthday: {new Date(user.dob).toLocaleDateString()}
                     </div>
                 </div>
                 <ul className="nav nav-tabs">
@@ -121,9 +141,9 @@ function Profile({token}) {
                         <a className = "nav-link" id="tags" onClick={() => changeTab("tags")}>Tags</a>
                     </li>
                 </ul>
-                {showAlbums && <Albums userId={token.id}/>}
-                {(showFollowing || showFollowers) && <Friends token={token} users={users} update={() => {window.location.href = "/profile"}}/>}
-                {showTags && <Tags userId={token.id}/>}
+                {showAlbums && <Albums userId={user.id}/>}
+                {(showFollowing || showFollowers) && <Friends token={user} users={users} update={() => {window.location.href = `/profile/${user.id}`}}/>}
+                {showTags && <Tags userId={user.id}/>}
             </div>
         </Fragment>
     );
