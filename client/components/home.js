@@ -6,6 +6,7 @@ import PhotoItem from './photoItem';
 function Home({token}) {
     const [showPosts, setShowPosts] = useState(true);
     const [showFriendRecs, setShowFriendRecs] = useState(false);
+    const [friendResults, setFriendResults] = useState();
     const [showYMAL, setShowYMAL] = useState(false);
     const [newPosts, setNewPosts] = useState();
     const [ymal, setYMAL] = useState();
@@ -63,6 +64,19 @@ function Home({token}) {
     }
 
     const getFriendRecs = async () => {
+        try {
+            console.log(token.id);
+            const response = await fetch(`http://localhost:5000/api/friend/mutuals/${token.id}`);
+            const results = await response.json();
+            console.log(results);
+            if (results.success) {
+                setFriendResults(results?.rows);
+                console.log("friend res");
+                console.log(friendResults);
+            }
+        } catch (e) {
+            console.error(e.message);
+        }
     }
 
     const getYMAL = async () => {
@@ -93,7 +107,7 @@ function Home({token}) {
                     </li>
                 </ul>
                 {showPosts && <PhotoItem userId={token.userid} photos={newPosts} pageType={"search"}/>}
-                {showFriendRecs && <div>Friend Recs page...</div>}
+                {showFriendRecs && <Friends token={token} users={friendResults} update={changeTab} />}
                 {showYMAL && <PhotoItem userId={token.userid} photos={ymal} pageType={"search"}/>}
             </div>
         </Fragment>

@@ -50,10 +50,23 @@ const getFollowers = async (req, res) => {
     });
 }
 
+const getMutuals = async (req, res) => {
+    let id = parseInt(req.params.id);
+    pool.query(Friend.getMutuals, [id], (error, results) => {
+        if (error) throw error;
+        res.status(200).send({
+            success: true,
+            message: `Mutuals successful.`,
+            rows: results.rows,
+        });
+    });
+}
+
 
 module.exports = {
     addFriend,
     deleteFriend,
     getFriends,
-    getFollowers
+    getFollowers,
+    getMutuals,
 }
