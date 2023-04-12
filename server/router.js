@@ -23,6 +23,7 @@ router.post('/friend/add', FriendController.addFriend);
 router.post('/friend/delete', FriendController.deleteFriend);
 router.get('/friend/friends/:id', FriendController.getFriends);
 router.get('/friend/followers/:id', FriendController.getFollowers);
+router.get('/friend/mutuals/:id', FriendController.getMutuals);
 
 //*** ALBUM ROUTES ***//
 router.post('/album/create', AlbumController.createAlbum);
