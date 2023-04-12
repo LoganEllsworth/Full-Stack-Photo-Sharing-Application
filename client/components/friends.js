@@ -46,7 +46,7 @@ function Friends({token, users, update}) {
 
     return (<div className="list-group mt-2">{users?.map(user =>
         <li onClick={() => setSelectedUser(user)} key={user.id} className="list-group-item d-flex justify-content-between align-items-center">
-            {user.firstname + " " + user.lastname + " (" + user.mutual_friends + " Mutual Friend(s))"}
+            {user.firstname + " " + user.lastname + " (" + (user.mutual_friends ? user.mutual_friends : 0) + " Mutual Friend(s))"}
             {!user.friends && <button className="badge badge-primary badge-pill" id={user.id} onClick={async (e) => { await addFriend(user.id); update(e); }}>Add Friend</button>}
             {user.friends && <button className="badge badge-pill" id={user.id} onClick={async (e) => { await removeFriend(user.id); update(e); }}>Remove Friend</button>}
         </li>)}</div>);
